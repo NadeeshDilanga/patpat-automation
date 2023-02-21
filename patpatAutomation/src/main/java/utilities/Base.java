@@ -2,7 +2,9 @@ package utilities;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeClass;
@@ -16,6 +18,7 @@ public class Base {
     public static String baseUrl;
     public static WebDriverWait wait;
     public static int MAX_WAIT;
+    public static Actions actions;
 
     /**
      * Automation Framework Initialization
@@ -26,6 +29,7 @@ public class Base {
         initializeTestData();
         initializeChromeDriver();
         initializeWait();
+        initializeActions();
     }
 
     /**
@@ -62,5 +66,43 @@ public class Base {
      */
     public void waitUntilElementIsPresent(By locator) throws Exception {
         wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+    }
+
+    /**
+     * waitUntilElementIsClickable method implemented to check if an element is clickable until the given timeout
+     * @param locator
+     * @throws Exception
+     */
+    public void waitUntilElementIsClickable(By locator) throws Exception {
+        wait.until(ExpectedConditions.elementToBeClickable(locator));
+    }
+
+    /**
+     * Selenium actions initialization
+     * @throws Exception
+     */
+    public void initializeActions() throws Exception {
+        actions = new Actions(driver);
+    }
+
+    /**
+     * scrollToElement method is implemented to scroll until the given element is found
+     * @param locator
+     * @throws Exception
+     */
+    public void scrollToElement(By locator) throws Exception {
+        WebElement element = driver.findElement(locator);
+        actions.scrollToElement(element);
+    }
+
+    /**
+     * getElementText method is implemented to get the text of a given web element
+     * @param locator
+     * @return String value of the given element
+     * @throws Exception
+     */
+    public String getElementText(By locator) throws Exception {
+        waitUntilElementIsPresent(locator);
+        return driver.findElement(locator).getText().trim();
     }
 }
